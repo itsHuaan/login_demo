@@ -10,8 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Builder
-public class UserModel {
-    private Long userId;
+public class SignUpRequest {
     private String name;
     private String username;
     private String password;

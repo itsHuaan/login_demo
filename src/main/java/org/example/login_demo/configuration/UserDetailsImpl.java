@@ -6,12 +6,14 @@ import org.example.login_demo.entity.RoleEntity;
 import org.example.login_demo.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -22,11 +24,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
-        String roleName = userEntity.getRole().getRoleName();
-        roles.add(new SimpleGrantedAuthority(roleName.contains("ROLE_")
-                ? "ROLE_" + roleName
-                : roleName));
+        Set<GrantedAuthority> roles = new HashSet<>();
+        roles.add(new SimpleGrantedAuthority(userEntity.getRole().getRoleName()));
         return roles;
     }
 
@@ -36,20 +35,12 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        if (userEntity == null)
-            return null;
-        if (userEntity.getPassword() == null)
-            return null;
-        return userEntity.getPassword();
+        return userEntity == null || userEntity.getPassword() == null ? null : userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        if (userEntity == null)
-            return null;
-        if (userEntity.getUsername() == null)
-            return null;
-        return userEntity.getUsername();
+        return userEntity == null || userEntity.getUsername() == null ? null : userEntity.getUsername();
     }
 
     @Override
@@ -70,5 +61,9 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getRoleName() {
+        return userEntity.getRole().getRoleName();
     }
 }

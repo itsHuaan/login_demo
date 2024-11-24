@@ -15,12 +15,14 @@ public class UserMapper {
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
                 .password(userEntity.getPassword())
-                .roleId(userEntity.getRole().getRoleId())
+                .roleId(userEntity.getRole() != null ? userEntity.getRole().getRoleId() : null)
                 .build();
     }
+
     public UserEntity toEntity(UserModel userModel) {
         RoleEntity role = new RoleEntity();
         role.setRoleId(userModel.getRoleId());
+
         return UserEntity.builder()
                 .userId(userModel.getUserId())
                 .name(userModel.getName())
